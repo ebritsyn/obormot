@@ -5,8 +5,6 @@ from PIL import Image
 from keras.models import model_from_json
 
 
-
-
 def convert2rgb(img):
     return cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
