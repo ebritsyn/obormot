@@ -1,6 +1,7 @@
 import io
 import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from utils.image_processing import find_faces_n_get_labels
 
 TOKEN = '502653463:AAHho1YHYZ_3C5gZgqXuCvFbpOtT_xEDW6g'
 
@@ -23,7 +24,7 @@ def ans_to_picture(bot, update):
         #buf_smiles = image_buffer
         #buf_faces.seek(0)
         #buf_smiles.seek(0)
-        bot.send_photo(chat_id=update.message.chat_id, photo=image_buffer)
+        bot.send_photo(chat_id=update.message.chat_id, photo=find_faces_n_get_labels(image_buffer))
         #bot.send_photo(chat_id=update.message.chat_id, photo=buf_faces)
         #bot.send_photo(chat_id=update.message.chat_id, photo=buf_smiles)
 

@@ -1,11 +1,11 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import cv2
-import keras
+import io
+from PIL import Image
 from keras.models import model_from_json
 
-model = model_from_json(open('../data/model/model.json').read())
-model.load_weights('../data/model/weights.h5')
+model = model_from_json(open('data/model/model.json').read())
+model.load_weights('data/model/weights.h5')
 
 
 def convert2rgb(img):
@@ -14,7 +14,7 @@ def convert2rgb(img):
 
 def get_faces(img):
     image = np.array(img)
-    face_cascade = cv2.CascadeClassifier('../data/model/haarcascade_frontalface_default.xml')
+    face_cascade = cv2.CascadeClassifier('data/model/haarcascade_frontalface_default.xml')
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, 1.1, 5)
 
@@ -25,7 +25,7 @@ def get_faces(img):
 
 def get_smiles(img, show=False):
     image = np.array(img)
-    smile_cascade = cv2.CascadeClassifier("../data/model/haarcascade_smile.xml")
+    smile_cascade = cv2.CascadeClassifier("data/model/haarcascade_smile.xml")
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     smiles = smile_cascade.detectMultiScale(gray, 1.1, 60)
 
@@ -36,8 +36,8 @@ def get_smiles(img, show=False):
 
 
 def add_stickers(img, corners, labels, sticker_size):
-    smiley = cv2.imread('../data/pics/smiling.png')
-    neutral = cv2.imread('../data/pics/neutral.png')
+    smiley = cv2.imread('data/pics/smiling.png')
+    neutral = cv2.imread('data/pics/neutral.png')
     smiley = cv2.resize(smiley, (sticker_size, sticker_size))
     neutral = cv2.resize(neutral, (sticker_size, sticker_size))
     image = np.array(img)
@@ -58,8 +58,9 @@ def add_stickers(img, corners, labels, sticker_size):
 
 
 def find_faces_n_get_labels(img):
-    image = np.array(img)
-    face_cascade = cv2.CascadeClassifier('../data/model/haarcascade_frontalface_default.xml')
+    img = bytes2ndarray(img)
+    image = img
+    face_cascade = cv2.CascadeClassifier('data/model/haarcascade_frontalface_default.xml')
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, 1.1, 5)
     cropped_faces = []
@@ -80,7 +81,18 @@ def find_faces_n_get_labels(img):
 
     sticker_size = int(np.median(list(map(lambda x: x.shape[0], cropped_faces)))) // 3
     image = add_stickers(image, corners, labels, sticker_size)
+    return ndarray2bytes(image)
+
+
+def ndarray2bytes(array):
+
+    buf = io.BytesIO()
+    Image.fromarray(array).save(buf, format="jpeg")
+
+    return buf
+
+
+def bytes2ndarray(buf):
+    image = np.array(Image.open(buf))
+
     return image
-
-
-
