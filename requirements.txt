@@ -2,3 +2,4 @@ python-telegram-bot
 keras
 pillow
 opencv-python
+tensorflow
