@@ -19,14 +19,9 @@ def ans_to_picture(bot, update):
     photo = bot.getFile(num_id)
     with io.BytesIO() as image_buffer:
         photo.download(out=image_buffer)
-        image_buffer.seek(0)
-        #buf_faces = image_buffer
-        #buf_smiles = image_buffer
-        #buf_faces.seek(0)
-        #buf_smiles.seek(0)
-        bot.send_photo(chat_id=update.message.chat_id, photo=find_faces_n_get_labels(image_buffer))
-        #bot.send_photo(chat_id=update.message.chat_id, photo=buf_faces)
-        #bot.send_photo(chat_id=update.message.chat_id, photo=buf_smiles)
+        msg_buf = find_faces_n_get_labels(image_buffer)
+        msg_buf.seek(0)
+        bot.send_photo(chat_id=update.message.chat_id, photo=msg_buf)
 
 
 def main():

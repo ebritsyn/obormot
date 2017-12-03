@@ -4,35 +4,11 @@ import io
 from PIL import Image
 from keras.models import model_from_json
 
-model = model_from_json(open('data/model/model.json').read())
-model.load_weights('data/model/weights.h5')
+
 
 
 def convert2rgb(img):
     return cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-
-
-def get_faces(img):
-    image = np.array(img)
-    face_cascade = cv2.CascadeClassifier('data/model/haarcascade_frontalface_default.xml')
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    faces = face_cascade.detectMultiScale(gray, 1.1, 5)
-
-    for (x, y, w, h) in faces:
-        cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
-    return image
-
-
-def get_smiles(img, show=False):
-    image = np.array(img)
-    smile_cascade = cv2.CascadeClassifier("data/model/haarcascade_smile.xml")
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    smiles = smile_cascade.detectMultiScale(gray, 1.1, 60)
-
-    for (x, y, w, h) in smiles:
-        cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 0), 2)
-
-    return image
 
 
 def add_stickers(img, corners, labels, sticker_size):
@@ -60,6 +36,8 @@ def add_stickers(img, corners, labels, sticker_size):
 def find_faces_n_get_labels(img):
     img = bytes2ndarray(img)
     image = img
+    model = model_from_json(open('data/model/model.json').read())
+    model.load_weights('data/model/weights.h5')
     face_cascade = cv2.CascadeClassifier('data/model/haarcascade_frontalface_default.xml')
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, 1.1, 5)
@@ -73,6 +51,7 @@ def find_faces_n_get_labels(img):
         gray_cr_res = cv2.cvtColor(cv2.resize(img_cropeed, (32, 32)), cv2.COLOR_BGR2GRAY)
         gray_cr_res = np.reshape(gray_cr_res, (32, 32, 1)) / 255
         score = model.predict(np.array([gray_cr_res]))[0][1]
+
         label = round(score)
         labels.append(label)
 
@@ -85,14 +64,11 @@ def find_faces_n_get_labels(img):
 
 
 def ndarray2bytes(array):
-
     buf = io.BytesIO()
     Image.fromarray(array).save(buf, format="jpeg")
-
     return buf
 
 
 def bytes2ndarray(buf):
     image = np.array(Image.open(buf))
-
     return image
