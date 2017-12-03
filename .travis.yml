@@ -9,4 +9,4 @@ install:
 
 script:
 
-  - python run_bot.py
+  - python run_bot.py 502653463:AAHho1YHYZ_3C5gZgqXuCvFbpOtT_xEDW6g
