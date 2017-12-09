@@ -1,3 +1,5 @@
+import sqlite3
+
 def add_item(update, database):
     #print(update)
     conn = sqlite3.connect('data.db')
