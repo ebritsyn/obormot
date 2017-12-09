@@ -1,8 +1,8 @@
 language: python
 python:
   - 3.5
-before_install:
-  - chmod +x setup.py
+before_script:
+ - chmod +x ./setup.py test
 install:
   - pip install codecov
 script:
