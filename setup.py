@@ -7,7 +7,7 @@ from setuptools import setup
 setup(
     name="greetings",
     version="0.0.0",
-    author="Britsyn Eugene, Luzyanin Artemiy, Rassolov Serega",
+    author="Britsyn Eugene, Luzyanin Artemiy, Rassolov Sergey",
     author_email="ebritsyn@gmail.com, kek@obormor.com, kek@obormot.ru",
     url="https://github.com/ebritsyn/obormot",
     license="MIT",
