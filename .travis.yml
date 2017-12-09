@@ -7,3 +7,5 @@ script:
   - ./setup.py test
 after_success:
   - codecov
+before_install:
+  - chmod +x setup.py
