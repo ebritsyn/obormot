@@ -2,18 +2,18 @@
 
 """Setup script."""
 
-from setuptools import setup
+from setuptools import setup, find_packages
+
+packages = find_packages(exclude=['tests*'])
 
 setup(
-    name="greetings",
+    name="obormot",
     version="0.0.0",
     author="Britsyn Eugene, Luzyanin Artemiy, Rassolov Sergey",
     author_email="ebritsyn@gmail.com, kek@obormor.com, kek@obormot.ru",
     url="https://github.com/ebritsyn/obormot",
     license="MIT",
-    packages=[
-        "obormot",
-    ],
+    packages=packages,
     install_requires=[
     ],
     setup_requires=[
