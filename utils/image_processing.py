@@ -90,10 +90,10 @@ def find_faces_n_get_labels(img):
     # image = img
     faces = get_faces(image)
     num_faces = len(faces)
-    if len(faces) == 0:
-        return num_faces, image
     labels = []
     scores = []
+    if len(faces) == 0:
+        return num_faces,scores,image
     for (x, y, w, h) in faces:
         img_cropped = image[y:y + h, x:x + w]
         label, score = get_smile_label(model, img_cropped)
