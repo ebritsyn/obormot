@@ -100,7 +100,7 @@ def find_faces_n_get_labels(img):
     num_faces = len(faces)
     labels = []
     scores = []
-    if len(faces) == 0:
+    if num_faces == 0:
         return num_faces, scores, image
     for (x, y, w, h) in faces:
         img_cropped = image[y:y + h, x:x + w]
