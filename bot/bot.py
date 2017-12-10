@@ -1,9 +1,7 @@
 import io
 import logging
 import sys
-
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-
 from utils.image_processing import find_faces_n_get_labels
 
 
@@ -22,9 +20,12 @@ def ans_to_picture(bot, update):
     photo = bot.getFile(num_id)
     with io.BytesIO() as image_buffer:
         photo.download(out=image_buffer)
-        msg_buf = find_faces_n_get_labels(image_buffer)
-        msg_buf.seek(0)
-        bot.send_photo(chat_id=update.message.chat_id, photo=msg_buf)
+        num_faces, scores, msg_buf = find_faces_n_get_labels(image_buffer)
+        if num_faces == 0:
+            bot.send_message(chat_id=update.message.chat_id, text='Faces not found')
+        else:
+            msg_buf.seek(0)
+            bot.send_photo(chat_id=update.message.chat_id, photo=msg_buf)
 
 
 def main():
@@ -36,6 +37,7 @@ def main():
 
     start_handler = CommandHandler('start', start)
     dispatcher.add_handler(start_handler)
+
 
     photo_handler = MessageHandler(Filters.photo, ans_to_picture)
     dispatcher.add_handler(photo_handler)
