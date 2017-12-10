@@ -1,2 +1,2 @@
 [MESSAGE CONTROL]
-disable = missing-docstring, no-member, invalid-name, too-many-locals, consider-using-enumerate, unused-variable, line-too-long
+disable = missing-docstring
