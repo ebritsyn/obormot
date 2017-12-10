@@ -8,10 +8,12 @@ from keras.models import model_from_json
 
 
 def convert2rgb(img):
+
     return cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
 
 def rect_to_bb(rect):
+
     x = rect.left()
     y = rect.top()
     w = rect.right() - x
@@ -20,6 +22,7 @@ def rect_to_bb(rect):
 
 
 def get_faces(img):
+
     image = img
     detector = dlib.get_frontal_face_detector()
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -30,7 +33,8 @@ def get_faces(img):
     return faces
 
 
-def get_smile_label(model,img_face):
+def get_smile_label(model, img_face):
+
     gray_cr_res = cv2.cvtColor(cv2.resize(img_face, (32, 32)),
                                cv2.COLOR_BGR2GRAY)
     gray_cr_res = np.reshape(gray_cr_res, (32, 32, 1)) / 255
@@ -55,14 +59,15 @@ def get_sticker_backgr(backgr, sticker):
 
 
 def get_sticker_size(faces):
+
     heights = list(map(lambda x: x[2], faces))
     return int(np.mean(heights) / 2.5)
+
 
 def add_stickers(img, faces, labels, sticker_size):
 
     smiley = cv2.imread('data/pics/smiling.png')
     neut = cv2.imread('data/pics/neutral.png')
-
 
     smiley = cv2.cvtColor(smiley, cv2.COLOR_BGR2RGB)
     neut = cv2.cvtColor(neut, cv2.COLOR_BGR2RGB)
@@ -75,9 +80,12 @@ def add_stickers(img, faces, labels, sticker_size):
     for i in range(len(labels)):
         x, y, w, h = faces[i]
         if labels[i] == 1:
-            image[y+h-t:y+h, x+w-t:x+w] = get_sticker_backgr(image[y+h-t:y+h, x+w-t:x+w] , smiley)
+
+            image[y+h-t:y+h, x+w-t:x+w] = \
+                get_sticker_backgr(image[y+h-t:y+h, x+w-t:x+w], smiley)
         else:
-            image[y+h-t:y+h, x+w-t:x+w] = get_sticker_backgr(image[y+h-t:y+h, x+w-t:x+w] , neut)
+            image[y+h-t:y+h, x+w-t:x+w] = \
+                get_sticker_backgr(image[y+h-t:y+h, x+w-t:x+w], neut)
 
     return image
 
@@ -93,7 +101,7 @@ def find_faces_n_get_labels(img):
     labels = []
     scores = []
     if len(faces) == 0:
-        return num_faces,scores,image
+        return num_faces, scores, image
     for (x, y, w, h) in faces:
         img_cropped = image[y:y + h, x:x + w]
         label, score = get_smile_label(model, img_cropped)
@@ -116,5 +124,6 @@ def ndarray2bytes(array):
 
 
 def bytes2ndarray(buf):
+
     image = np.array(Image.open(buf))
     return image
