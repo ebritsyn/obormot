@@ -5,6 +5,3 @@ opencv-python
 tensorflow
 h5py
 numpy
-cmake
-boost_python3
-dlib
