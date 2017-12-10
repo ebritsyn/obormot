@@ -1,13 +1,33 @@
 import io
 import logging
 import sys
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove)
+from telegram.ext import (Updater, CommandHandler, MessageHandler,
+                          Filters, RegexHandler,
+                          ConversationHandler)
 from utils.image_processing import find_faces_n_get_labels
 
 
 def start(bot, update):
-    bot.send_message(chat_id=update.message.chat_id,
-                     text="I'm a bot, please talk to me!")
+    reply_keyboard = [['Predict', 'Help', 'Cancel']]
+    update.message.reply_text(
+        "Im a bot, please talk to me!",
+        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
+
+    return ACTION
+
+
+def cancel(bot, update):
+    update.message.reply_text('Bye! I hope we can talk again some day.',
+                              reply_markup=ReplyKeyboardRemove())
+
+    return ConversationHandler.END
+
+def action(bot, update):
+    msg = update.message.text
+    if msg == 'Predict':
+        update.message.reply_text("Send me a photo, please")
+        return PHOTO
 
 
 def ans_to_not_photo(bot, update):
@@ -33,18 +53,30 @@ def main():
 
     token = sys.argv[1]
     updater = Updater(token=token)
-    dispatcher = updater.dispatcher
+    dp = updater.dispatcher
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - \
      %(message)s', level=logging.INFO)
+    global ACTION, PHOTO
+    ACTION, PHOTO = range(2)
+    conv_handler = ConversationHandler(
+        entry_points=[CommandHandler('start', start)],
 
-    start_handler = CommandHandler('start', start)
-    dispatcher.add_handler(start_handler)
+        states={
+            ACTION: [RegexHandler('^(Predict|Help|Cancel)$', action)],
 
-    photo_handler = MessageHandler(Filters.photo, ans_to_picture)
-    dispatcher.add_handler(photo_handler)
+            PHOTO: [MessageHandler(Filters.photo, ans_to_picture)]
+             #       CommandHandler('skip', skip_photo)],
 
-    not_photo_handler = MessageHandler((~Filters.photo), ans_to_not_photo, )
-    dispatcher.add_handler(not_photo_handler)
+           # LOCATION: [MessageHandler(Filters.location, location),
+            #           CommandHandler('skip', skip_location)],
+
+           # BIO: [MessageHandler(Filters.text, bio)]
+        },
+
+        fallbacks=[CommandHandler('cancel', cancel)]
+    )
+
+    dp.add_handler(conv_handler)
 
     updater.start_polling()
 
