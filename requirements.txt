@@ -5,4 +5,5 @@ opencv-python
 tensorflow
 h5py
 numpy
+boost
 dlib
