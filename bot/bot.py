@@ -1,10 +1,10 @@
-import sys
 import io
 import logging
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-from utils.image_processing import find_faces_n_get_labels
+import sys
 
-#TOKEN = '502653463:AAHho1YHYZ_3C5gZgqXuCvFbpOtT_xEDW6g'
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+
+from utils.image_processing import find_faces_n_get_labels
 
 
 def start(bot, update):
