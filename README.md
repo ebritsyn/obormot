@@ -6,4 +6,4 @@ Initial version of telegram bot
 
 
 [coverage-image]: https://codecov.io/gh/e.britsyn/obormot/branch/master/graph/badge.svg
-[coverage-url]: https://codecov.io/gh/ebritsyn/obormor
+[coverage-url]: https://codecov.io/gh/ebritsyn/obormot
