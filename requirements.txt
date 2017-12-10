@@ -6,4 +6,5 @@ tensorflow
 h5py
 numpy
 boost
+cmake
 dlib
