@@ -8,6 +8,7 @@ from keras.models import model_from_json
 def convert2rgb(img):
     return cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
+
 def add_s(roi, img2):
     rows,cols,channels = img2.shape
     img2gray = cv2.cvtColor(img2,cv2.COLOR_BGR2GRAY)
