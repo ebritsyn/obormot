@@ -65,12 +65,6 @@ def main():
             ACTION: [RegexHandler('^(Predict|Help|Cancel)$', action)],
 
             PHOTO: [MessageHandler(Filters.photo, ans_to_picture)]
-             #       CommandHandler('skip', skip_photo)],
-
-           # LOCATION: [MessageHandler(Filters.location, location),
-            #           CommandHandler('skip', skip_location)],
-
-           # BIO: [MessageHandler(Filters.text, bio)]
         },
 
         fallbacks=[CommandHandler('cancel', cancel)]
