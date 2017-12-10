@@ -6,7 +6,8 @@ def add_item(update):
     conn = sqlite3.connect('data.db')
     cursor = conn.cursor()
     try:
-        cursor.execute('''CREATE TABLE users (chat_id, mess_id, text, user, name1, name2)''')
+        cursor.execute('''CREATE TABLE users (chat_id, mess_id, text,\
+         user, name1, name2)''')
     except sqlite3.OperationalError:
         pass
     mess = update.message
@@ -22,6 +23,7 @@ def add_item(update):
     # print('1name:',name1)
     name2 = mess.chat.last_name
     # print('2name:',name2)
-    cursor.execute("INSERT INTO users VALUES (?,?,?,?,?,?)", (chat_id, mess_id, text, username, name1, name2))
+    cursor.execute("INSERT INTO users VALUES (?,?,?,?,?,?)",
+                   (chat_id, mess_id, text, username, name1, name2))
     conn.commit()
     conn.close()

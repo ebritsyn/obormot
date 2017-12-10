@@ -25,31 +25,31 @@ def add_s(roi, img2):
 def add_stickers(img, corners, labels, sticker_size, sizes):
 
     smiley = cv2.imread('data/pics/smiling.png')
-    neutral = cv2.imread('data/pics/neutral.png')
+    neut = cv2.imread('data/pics/neutral.png')
 
     smiley = cv2.cvtColor(smiley, cv2.COLOR_BGR2RGB)
-    neutral = cv2.cvtColor(neutral, cv2.COLOR_BGR2RGB)
+    neut = cv2.cvtColor(neut, cv2.COLOR_BGR2RGB)
 
     smiley = cv2.resize(smiley, (sticker_size, sticker_size))
-    neutral = cv2.resize(neutral, (sticker_size, sticker_size))
-    image = np.array(img)
+    neut = cv2.resize(neut, (sticker_size, sticker_size))
+    imag = np.array(img)
     t2 = sticker_size
     t1 = sticker_size - t2
     for i in range(len(labels)):
         try:
-            corner_x, corner_y = corners[i]
+            c_x, c_y = corners[i]
             a = (sizes[i] - t2) // 2
             if labels[i] == 1:
-                image[corner_x - t1:corner_x + t2, corner_y - t2 - a:corner_y + t1 - a] = add_s(
-                    image[corner_x - t1:corner_x + t2, corner_y - t2 - a:corner_y + t1 - a], smiley)
+                imag[c_x - t1:c_x + t2, c_y - t2 - a:c_y + t1 - a] = add_s(
+                    imag[c_x - t1:c_x + t2, c_y - t2 - a:c_y + t1 - a], smiley)
             else:
-                image[corner_x - t1:corner_x + t2, corner_y - t2 - a:corner_y + t1 - a] = add_s(
-                    image[corner_x - t1:corner_x + t2, corner_y - t2 - a:corner_y + t1 - a], neutral)
+                imag[c_x - t1:c_x + t2, c_y - t2 - a:c_y + t1 - a] = add_s(
+                    imag[c_x - t1:c_x + t2, c_y - t2 - a:c_y + t1 - a], neut)
         except BaseException:
             print("EXCEPTION")
             continue
 
-    return image
+    return imag
 
 
 def find_faces_n_get_labels(img):
@@ -57,7 +57,8 @@ def find_faces_n_get_labels(img):
     image = img
     model = model_from_json(open('data/model/model.json').read())
     model.load_weights('data/model/weights.h5')
-    face_cascade = cv2.CascadeClassifier('data/model/haarcascade_frontalface_default.xml')
+    face_cascade = cv2.CascadeClassifier('data/model/haarcascade_frontalface\
+    _default.xml')
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, 1.1, 5)
     cropped_faces = []
@@ -69,7 +70,8 @@ def find_faces_n_get_labels(img):
         corners.append((y, x + w))
         img_cropeed = img[y:y + h, x:x + w]
         cropped_faces.append(img_cropeed)
-        gray_cr_res = cv2.cvtColor(cv2.resize(img_cropeed, (32, 32)), cv2.COLOR_BGR2GRAY)
+        gray_cr_res = cv2.cvtColor(cv2.resize(img_cropeed, (32, 32)),
+                                   cv2.COLOR_BGR2GRAY)
         gray_cr_res = np.reshape(gray_cr_res, (32, 32, 1)) / 255
         score = model.predict(np.array([gray_cr_res]))[0][1]
 
@@ -79,7 +81,8 @@ def find_faces_n_get_labels(img):
     for (x, y, w, h) in faces:
         cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-    sticker_size = int(np.median(list(map(lambda x: x.shape[0], cropped_faces)))) // 3
+    sticker_size = int(np.median(list(map(lambda x: x.shape[0],
+                                          cropped_faces)))) // 3
     image = add_stickers(image, corners, labels, sticker_size, sizes)
     return ndarray2bytes(image)
 

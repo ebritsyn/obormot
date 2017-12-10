@@ -4,7 +4,7 @@
 
 from setuptools import setup, find_packages
 
-#packages = find_packages(exclude=['tests*'])
+packages = find_packages(exclude=['tests*'])
 
 setup(
     name="obormot",
@@ -13,9 +13,7 @@ setup(
     author_email="ebritsyn@gmail.com, kek@obormor.com, kek@obormot.ru",
     url="https://github.com/ebritsyn/obormot",
     license="MIT",
-    packages=[
-        "bot",
-    ],
+    packages=packages,
     install_requires=[
     ],
     setup_requires=[
