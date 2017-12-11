@@ -9,12 +9,11 @@ from utils.image_processing import find_faces_n_get_labels
 
 
 def start(bot, update):
-    reply_keyboard = [['Predict', 'Help', 'Cancel']]
+    reply_keyboard1 = [['Predict', 'Help', 'Cancel']]
     update.message.reply_text(
         "Im a bot, please talk to me!",
-        reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
-
-    return ACTION
+        reply_markup=ReplyKeyboardMarkup(reply_keyboard1, one_time_keyboard=True))
+    return CHOOSE_ACTION
 
 
 def cancel(bot, update):
@@ -23,11 +22,20 @@ def cancel(bot, update):
 
     return ConversationHandler.END
 
-def action(bot, update):
+
+def choose_action(bot, update):
     msg = update.message.text
-    if msg == 'Predict':
-        update.message.reply_text("Send me a photo, please")
-        return PHOTO
+    if msg == "Predict":
+        return PREDICT
+    elif msg == "Help":
+        return HELP_US
+    elif msg == "Menu":
+        reply_keyboard1 = [['Predict', 'Help', 'Cancel']]
+        update.message.reply_text("Ok, What else?",
+                                  reply_markup=ReplyKeyboardMarkup(
+                                      reply_keyboard1,
+                                      one_time_keyboard=True))
+        return CHOOSE_ACTION
 
 
 def ans_to_not_photo(bot, update):
@@ -45,8 +53,29 @@ def ans_to_picture(bot, update):
             bot.send_message(chat_id=update.message.chat_id,
                              text='Faces not found')
         else:
+            reply_keyboard1 = [['Predict', 'Help', 'Cancel']]
             msg_buf.seek(0)
             bot.send_photo(chat_id=update.message.chat_id, photo=msg_buf)
+            update.message.reply_text("Done!\nWhat else?",
+                                      reply_markup=ReplyKeyboardMarkup(
+                                          reply_keyboard1,
+                                          one_time_keyboard=True))
+            return CHOOSE_ACTION
+
+
+def help_us(bot, update):
+    update.message.reply_text("TO BE DONE!")
+    reply_keyboard1 = [['Predict', 'Help', 'Cancel']]
+    update.message.reply_text("What else?",
+                              reply_markup=ReplyKeyboardMarkup(reply_keyboard1,
+                                                               one_time_keyboard=True))
+    return CHOOSE_ACTION
+
+
+def predict(bot, update):
+    reply_keyboard2 = [['Menu','Cancel']]
+    update.message.reply_text("Send me a photo, please", reply_markup=ReplyKeyboardMarkup(reply_keyboard2, one_time_keyboard=True))
+    return PHOTO
 
 
 def main():
@@ -56,18 +85,24 @@ def main():
     dp = updater.dispatcher
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - \
      %(message)s', level=logging.INFO)
-    global ACTION, PHOTO
-    ACTION, PHOTO = range(2)
+    global CHOOSE_ACTION, PHOTO, CANCEL, PREDICT, HELP_US
+    CHOOSE_ACTION, PHOTO, CANCEL, PREDICT, HELP_US = range(5)
     conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('start', start)],
+        entry_points=[CommandHandler('start', start)],#, RegexHandler('^(Predict)$', predict), RegexHandler('^(Help)$', help_us), RegexHandler('^(Cancel)$', cancel)],
 
         states={
-            ACTION: [RegexHandler('^(Predict|Help|Cancel)$', action)],
+            CHOOSE_ACTION: [RegexHandler('^(Predict)$', predict),
+                            RegexHandler('^(Help)$', help_us)],
 
-            PHOTO: [MessageHandler(Filters.photo, ans_to_picture)]
+            PHOTO: [MessageHandler(Filters.photo, ans_to_picture),
+                    RegexHandler('^(Menu)$', choose_action)],
+
+            HELP_US: [RegexHandler('^(Help)$', help_us)],
+
+            PREDICT: [RegexHandler('^(Predict)$', predict)]
         },
 
-        fallbacks=[CommandHandler('cancel', cancel)]
+        fallbacks=[RegexHandler('^(Cancel)$', cancel)]
     )
 
     dp.add_handler(conv_handler)
