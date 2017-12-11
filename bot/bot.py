@@ -3,6 +3,7 @@ import logging
 import sys
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from utils.image_processing import find_faces_n_get_labels
+from utils.database2 import DbConnection
 
 
 def start(bot, update):
@@ -11,6 +12,9 @@ def start(bot, update):
 
 
 def ans_to_not_photo(bot, update):
+    data = DbConnection('data.db')
+    data.add_user(update)
+    data.add_message(update)
     bot.send_message(chat_id=update.message.chat_id,
                      text='This is not a picture :(')
 

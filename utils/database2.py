@@ -9,8 +9,9 @@ class DbConnection:
 
     def add_user(self, update):
         try:
-            self.cursor.execute('''CREATE TABLE users (user TEXT,
+            self.cursor.execute('''CREATE TABLE users (
                                 id INTEGER PRIMARY KEY,
+                                    user TEXT,
                                  name1 TEXT, name2 TEXT)''')
         except sqlite3.OperationalError:
             pass
@@ -22,8 +23,9 @@ class DbConnection:
         chat_id = mess.chat.id
         try:
             self.cursor.execute("INSERT INTO users VALUES (?,?,?,?)",
-                                (chat_id, username, name1, name2))
-        except sqlite3.OperationalError:
+                                (int(chat_id), str(username),
+                                 str(name1), str(name2)))
+        except (sqlite3.OperationalError, sqlite3.IntegrityError):
             print('user_already_in_base')
 
         self.connection.commit()
