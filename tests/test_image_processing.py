@@ -17,3 +17,4 @@ def test_convert2rgb():
     img = np.ones(shape) * 255
     img = img.astype('uint8')
     assert convert2rgb(img).shape == img.shape
+

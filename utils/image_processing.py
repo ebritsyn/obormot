@@ -78,11 +78,11 @@ def add_stickers(img, faces, labels):
 
     image = np.array(img)
     for i, label in enumerate(labels):
+        y_1 = faces[i][1] + faces[i][3] - st_size
+        y_2 = faces[i][1] + faces[i][3]
+        x_1 = faces[i][0] + faces[i][2] - st_size
+        x_2 = faces[i][0] + faces[i][2]
         if label == 1:
-            y_1 = faces[i][1]+faces[i][3]-st_size
-            y_2 = faces[i][1]+faces[i][3]
-            x_1 = faces[i][0]+faces[i][2]-st_size
-            x_2 = faces[i][0]+faces[i][2]
             image[y_1:y_2, x_1:x_2] = \
                 get_sticker_backgr(image[y_1:y_2, x_1:x_2], smiley)
         else:
