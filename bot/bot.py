@@ -20,7 +20,7 @@ def ans_to_picture(bot, update):
     photo = bot.getFile(num_id)
     with io.BytesIO() as image_buffer:
         photo.download(out=image_buffer)
-        num_faces, scores, msg_buf = find_faces_n_get_labels(image_buffer)
+        num_faces, _, msg_buf = find_faces_n_get_labels(image_buffer)
         if num_faces == 0:
             bot.send_message(chat_id=update.message.chat_id,
                              text='Faces not found')

@@ -4,7 +4,7 @@
 
 from setuptools import setup, find_packages
 
-packages = find_packages(exclude=['tests*'])
+# pckgs =
 
 setup(
     name="obormot",
@@ -13,7 +13,7 @@ setup(
     author_email="ebritsyn@gmail.com, kek@obormor.com, kek@obormot.ru",
     url="https://github.com/ebritsyn/obormot",
     license="MIT",
-    packages=packages,
+    packages=find_packages(exclude=['tests*']),
     install_requires=[
     ],
     setup_requires=[

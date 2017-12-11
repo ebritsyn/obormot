@@ -1,2 +1,6 @@
+[MASTER]
+extension-pkg-whitelist=cv2, dlib
+
 [MESSAGE CONTROL]
 disable = missing-docstring
+
