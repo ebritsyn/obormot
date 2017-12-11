@@ -44,7 +44,7 @@ def get_smile_label(model, img_face):
         label = 1
     else:
         label = 0
-    return label, score
+    return label
 
 
 def get_sticker_backgr(backgr, sticker):
@@ -101,20 +101,18 @@ def find_faces_n_get_labels(img):
     faces = get_faces(image)
     num_faces = len(faces)
     labels = []
-    scores = []
     if num_faces == 0:
-        return num_faces, scores, image
+        return num_faces, image
     for (f_x, f_y, f_w, f_h) in faces:
         img_cropped = image[f_y:f_y + f_h, f_x:f_x + f_w]
-        label, score = get_smile_label(model, img_cropped)
+        label = get_smile_label(model, img_cropped)
         labels.append(label)
-        scores.append(score)
     color = (0, 255, 0)
     for (f_x, f_y, f_w, f_h) in faces:
         cv2.rectangle(image, (f_x, f_y), (f_x + f_w, f_y + f_h), color, 2)
 
     image = add_stickers(image, faces, labels)
-    return num_faces, scores, ndarray2bytes(image)
+    return num_faces, ndarray2bytes(image)
 
 
 def ndarray2bytes(array):
