@@ -14,11 +14,11 @@ def convert2rgb(img):
 
 def rect_to_bb(rect):
 
-    x = rect.left()
-    y = rect.top()
-    w = rect.right() - x
-    h = rect.bottom() - y
-    return (x, y, w, h)
+    rect_x = rect.left()
+    rect_y = rect.top()
+    rect_w = rect.right() - rect_x
+    rect_h = rect.bottom() - rect_y
+    return (rect_x, rect_y, rect_w, rect_h)
 
 
 def get_faces(img):
@@ -50,7 +50,7 @@ def get_smile_label(model, img_face):
 def get_sticker_backgr(backgr, sticker):
 
     sticker_gray = cv2.cvtColor(sticker, cv2.COLOR_BGR2GRAY)
-    ret, mask = cv2.threshold(sticker_gray, 10, 255, cv2.THRESH_BINARY)
+    _, mask = cv2.threshold(sticker_gray, 10, 255, cv2.THRESH_BINARY)
     mask_inv = cv2.bitwise_not(mask)
     backgr_bg = cv2.bitwise_and(backgr, backgr, mask=mask_inv)
     sticker_fg = cv2.bitwise_and(sticker, sticker, mask=mask)
@@ -64,28 +64,30 @@ def get_sticker_size(faces):
     return int(np.mean(heights) / 2.5)
 
 
-def add_stickers(img, faces, labels, sticker_size):
+def add_stickers(img, faces, labels):
 
+    st_size = get_sticker_size(faces)
     smiley = cv2.imread('data/pics/smiling.png')
     neut = cv2.imread('data/pics/neutral.png')
 
     smiley = cv2.cvtColor(smiley, cv2.COLOR_BGR2RGB)
     neut = cv2.cvtColor(neut, cv2.COLOR_BGR2RGB)
 
-    smiley = cv2.resize(smiley, (sticker_size, sticker_size))
-    neut = cv2.resize(neut, (sticker_size, sticker_size))
+    smiley = cv2.resize(smiley, (st_size, st_size))
+    neut = cv2.resize(neut, (st_size, st_size))
 
     image = np.array(img)
-    t = sticker_size
-    for i in range(len(labels)):
-        x, y, w, h = faces[i]
-        if labels[i] == 1:
-
-            image[y+h-t:y+h, x+w-t:x+w] = \
-                get_sticker_backgr(image[y+h-t:y+h, x+w-t:x+w], smiley)
+    for i, label in enumerate(labels):
+        y_1 = faces[i][1] + faces[i][3] - st_size
+        y_2 = faces[i][1] + faces[i][3]
+        x_1 = faces[i][0] + faces[i][2] - st_size
+        x_2 = faces[i][0] + faces[i][2]
+        if label == 1:
+            image[y_1:y_2, x_1:x_2] = \
+                get_sticker_backgr(image[y_1:y_2, x_1:x_2], smiley)
         else:
-            image[y+h-t:y+h, x+w-t:x+w] = \
-                get_sticker_backgr(image[y+h-t:y+h, x+w-t:x+w], neut)
+            image[y_1:y_2, x_1:x_2] = \
+                get_sticker_backgr(image[y_1:y_2, x_1:x_2], neut)
 
     return image
 
@@ -102,17 +104,16 @@ def find_faces_n_get_labels(img):
     scores = []
     if num_faces == 0:
         return num_faces, scores, image
-    for (x, y, w, h) in faces:
-        img_cropped = image[y:y + h, x:x + w]
+    for (f_x, f_y, f_w, f_h) in faces:
+        img_cropped = image[f_y:f_y + f_h, f_x:f_x + f_w]
         label, score = get_smile_label(model, img_cropped)
         labels.append(label)
         scores.append(score)
+    color = (0, 255, 0)
+    for (f_x, f_y, f_w, f_h) in faces:
+        cv2.rectangle(image, (f_x, f_y), (f_x + f_w, f_y + f_h), color, 2)
 
-    for (x, y, w, h) in faces:
-        cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
-
-    sticker_size = get_sticker_size(faces)
-    image = add_stickers(image, faces, labels, sticker_size)
+    image = add_stickers(image, faces, labels)
     return num_faces, scores, ndarray2bytes(image)
 
 
