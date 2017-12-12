@@ -10,11 +10,11 @@ labels (emojis :smiling: and :neutral:) on found faces
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+TBD 
 
 ### Prerequisites
 
-You need following python libraries to use the bot
+You need the following python libraries to use the bot
 
 ```
 numpy
@@ -24,6 +24,8 @@ dlib
 ```
 
 ### Installing
+
+TBD
 
 A step by step series of examples that tell you have to get a development env running
 
@@ -43,7 +45,7 @@ End with an example of getting some data out of the system or using it for a lit
 
 ## Running the tests
 
-To run tests do following steps in console:
+To run tests do the following steps in console:
 
 ```
 cd tests
@@ -52,6 +54,7 @@ python setup.py test
 
 ### Break down into end to end tests
 
+TBD
 Explain what these tests test and why
 
 ```
@@ -60,6 +63,7 @@ Give an example
 
 ### And coding style tests
 
+TBD
 Explain what these tests test and why
 
 ```
@@ -68,25 +72,22 @@ Give an example
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+TBD
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
+* TBD
 
 ## Versioning
 
 TBD 
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
 ## Authors
 
 TBD
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Eugene Britsyn** - *Initial work* - [ebritsyn](https://github.com/ebritsyn/)
+* **Artemiy Luzyanin** - *Initial work* - [artemluzyanin](https://github.com/artemluzyanin)
+* **Sergey Rassolov** - *Initial work* - [RassolovSerg](https://github.com/RassolovSerg)
 
 ## License
 
