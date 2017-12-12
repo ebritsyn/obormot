@@ -5,7 +5,7 @@
 
 Obormot is a telegram bot that receives a picture, detects faces in that 
 picture and predicts if they are smiling or neutral. It obtains faces 
-bounding boxes, draws them on the input image and set corresponding 
+bounding boxes, draws them in the input image and sets corresponding 
 labels (emojis :smiling: and :neutral:) on found faces 
 
 ## Getting Started
