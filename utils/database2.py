@@ -8,13 +8,10 @@ class DbConnection:
         self.connection.execute("PRAGMA foreign_keys=ON")
 
     def add_user(self, update):
-        try:
-            self.cursor.execute('''CREATE TABLE users (
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS users (
                                 id INTEGER PRIMARY KEY,
                                     user TEXT,
                                  name1 TEXT, name2 TEXT)''')
-        except sqlite3.OperationalError:
-            pass
 
         mess = update.message
         username = mess.chat.username
@@ -31,14 +28,10 @@ class DbConnection:
         self.connection.commit()
 
     def add_message(self, update):
-
-        try:
-            self.cursor.execute('''CREATE TABLE messages
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS messages
                                 (id INTEGER PRIMARY KEY,
                                  text TEXT, user_id INTEGER,
                                 FOREIGN KEY(user_id) REFERENCES users(id))''')
-        except sqlite3.OperationalError:
-            pass
 
         mess = update.message
         mess_id = mess.message_id
