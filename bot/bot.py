@@ -2,8 +2,8 @@ import io
 import logging
 import os
 import sys
-import telegram
 from threading import Thread
+import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from utils.image_processing import find_faces_n_get_labels
 from utils.database2 import DbConnection
