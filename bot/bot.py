@@ -2,6 +2,7 @@ import io
 import logging
 import os
 import sys
+import telegram
 from threading import Thread
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from utils.image_processing import find_faces_n_get_labels
@@ -29,6 +30,8 @@ class Bot:  # pylint: disable=too-few-public-methods
 
     @staticmethod
     def _ans_to_picture(bot, update):
+        bot.send_chat_action(chat_id=update.message.chat_id,
+                             action=telegram.ChatAction.UPLOAD_PHOTO)
         num_id = update.message.photo[-1].file_id
         photo = bot.getFile(num_id)
         with io.BytesIO() as image_buffer:
