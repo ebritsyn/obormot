@@ -2,6 +2,10 @@ import sys
 from bot.bot import Bot
 
 
-if __name__ == '__main__':
+def main():
     obormot = Bot(sys.argv[1])
     obormot.start()
+
+
+if __name__ == '__main__':
+    main()

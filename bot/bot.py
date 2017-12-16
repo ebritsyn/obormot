@@ -8,19 +8,19 @@ from utils.image_processing import find_faces_n_get_labels
 from utils.database2 import DbConnection
 
 
-class Bot:
+class Bot:  # pylint: disable=too-few-public-methods
 
     def __init__(self, token):
         self.token = token
 
     @staticmethod
-    def __start(bot, update):
+    def _start(bot, update):
         bot.send_message(
             chat_id=update.message.chat_id,
             text="I'm a bot, please talk to me!")
 
     @staticmethod
-    def __ans_to_not_photo(bot, update):
+    def _ans_to_not_photo(bot, update):
         data = DbConnection('data.db')
         data.add_user(update)
         data.add_message(update)
@@ -28,7 +28,7 @@ class Bot:
                          text='This is not a picture :(')
 
     @staticmethod
-    def __ans_to_picture(bot, update):
+    def _ans_to_picture(bot, update):
         num_id = update.message.photo[-1].file_id
         photo = bot.getFile(num_id)
         with io.BytesIO() as image_buffer:
@@ -47,26 +47,27 @@ class Bot:
         logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - \
         %(message)s', level=logging.INFO)
 
-        def __stop_and_restart():
+        def _stop_and_restart():
             """Gracefully stop the Updater and replace the current process \
             with a new one"""
             updater.stop()
             os.execl(sys.executable, sys.executable, *sys.argv)
 
-        def restart(bot, update):
+        def restart(bot, update):  # pylint: disable=unused-argument
             update.message.reply_text('Bot is restarting...')
-            Thread(target=__stop_and_restart).start()
+            Thread(target=_stop_and_restart).start()
 
-        start_handler = CommandHandler('start', self.__start)
+        start_handler = CommandHandler('start', self._start)
         dispatcher.add_handler(start_handler)
-        dispatcher.add_handler(CommandHandler('r', restart, filters=Filters.user(
-            username='@ebritsyn')))
+        dispatcher.add_handler(
+            CommandHandler('r', restart, filters=Filters.user(
+                username='@ebritsyn')))
 
-        photo_handler = MessageHandler(Filters.photo, self.__ans_to_picture)
+        photo_handler = MessageHandler(Filters.photo, self._ans_to_picture)
         dispatcher.add_handler(photo_handler)
 
         not_photo_handler = MessageHandler(
-            (~Filters.photo), self.__ans_to_not_photo)
+            (~Filters.photo), self._ans_to_not_photo)
         dispatcher.add_handler(not_photo_handler)
 
         updater.start_polling()
