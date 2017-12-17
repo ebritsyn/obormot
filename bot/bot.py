@@ -44,11 +44,13 @@ class Bot:  # pylint: disable=too-few-public-methods
         mess_id, text, chat_id = self.parse_message(update)
         self.data.add_user(username, name1, name2, chat_id)
         self.data.add_message(mess_id, text, chat_id)
-        bot.send_message(chat_id=update.message.chat_id,
+        bot.send_message(chat_id=chat_id,
                          text='This is not a picture :(')
 
     def _ans_to_picture(self, bot, update):
-        bot.send_chat_action(chat_id=update.message.chat_id,
+        username, name1, name2, chat_id = self.parse_user(update)
+        self.data.add_user(username, name1, name2, chat_id)
+        bot.send_chat_action(chat_id=chat_id,
                              action=telegram.ChatAction.UPLOAD_PHOTO)
         num_id = update.message.photo[-1].file_id
         photo = bot.getFile(num_id)
