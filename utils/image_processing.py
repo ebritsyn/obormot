@@ -10,6 +10,11 @@ import tensorflow as tf
 class Model:
 
     def __init__(self):
+
+        self.smiley = cv2.imread('data/pics/smiling.png')
+        self.neutral = cv2.imread('data/pics/neutral.png')
+        self.smiley = cv2.cvtColor(self.smiley, cv2.COLOR_BGR2RGB)
+        self.neutral = cv2.cvtColor(self.neutral, cv2.COLOR_BGR2RGB)
         self.model = model_from_json(open('data/model/model.json').read())
         self.model.load_weights('data/model/weights.h5')
         self.graph = tf.get_default_graph()
@@ -26,7 +31,7 @@ class Model:
         rect_y = rect.top()
         rect_w = rect.right() - rect_x
         rect_h = rect.bottom() - rect_y
-        return (rect_x, rect_y, rect_w, rect_h)
+        return rect_x, rect_y, rect_w, rect_h
 
     def get_faces(self, img):
 
@@ -36,11 +41,10 @@ class Model:
         rects = detector(gray, 1)
         faces = []
         for rect in rects:
-            faces.append(self.rect_to_bb(rect))
+            faces.append(list(self.rect_to_bb(rect)))
         return faces
 
     def get_smile_label(self, img_face):
-
         gray_cr_res = cv2.cvtColor(cv2.resize(img_face, (32, 32)),
                                    cv2.COLOR_BGR2GRAY)
         gray_cr_res = np.reshape(gray_cr_res, (32, 32, 1)) / 255
@@ -67,25 +71,56 @@ class Model:
         return merged
 
     @staticmethod
-    def get_sticker_size(faces):
+    def crop_face(bound_box, img):
+        f_x, f_y, f_w, f_h = bound_box
+        top, bottom, left, right = 0, 0, 0, 0
+        if f_y < 0:
+            top = - f_y
+            f_y = 0
 
-        heights = list(map(lambda x: x[2], faces))
-        return int(np.mean(heights) / 2.5)
+        if f_x < 0:
+            left = - f_x
+            f_x = 0
+
+        if f_x + f_w > img.shape[1]:
+            right = f_x + f_w - img.shape[1]
+            f_w -= right
+
+        if f_y + f_h > img.shape[0]:
+            bottom = f_y + f_h - img.shape[0]
+            f_h -= bottom
+        img_cropped = img[f_y:f_y + f_h, f_x:f_x + f_w]
+
+        img_cropped = cv2.copyMakeBorder(img_cropped,
+                                         top, bottom, left, right,
+                                         cv2.BORDER_REPLICATE)
+
+        return img_cropped
 
     def add_stickers(self, img, faces, labels):
 
-        st_size = self.get_sticker_size(faces)
-        smiley = cv2.imread('data/pics/smiling.png')
-        neut = cv2.imread('data/pics/neutral.png')
-
-        smiley = cv2.cvtColor(smiley, cv2.COLOR_BGR2RGB)
-        neut = cv2.cvtColor(neut, cv2.COLOR_BGR2RGB)
-
-        smiley = cv2.resize(smiley, (st_size, st_size))
-        neut = cv2.resize(neut, (st_size, st_size))
-
         image = np.array(img)
         for i, label in enumerate(labels):
+
+            if faces[i][0] < 0:
+                faces[i][2] += faces[i][0]
+                faces[i][0] = 0
+
+            if faces[i][1] < 0:
+                faces[i][3] += faces[i][1]
+                faces[i][1] = 0
+
+            if faces[i][0] + faces[i][2] > image.shape[1]:
+                faces[i][2] = image.shape[1] - faces[i][0]
+
+            if faces[i][1] + faces[i][3] > image.shape[0]:
+                faces[i][3] = image.shape[0] - faces[i][1]
+
+            st_size = int(min(faces[i][2], faces[i][3]) // 2.2)
+
+            smiley = cv2.resize(self.smiley, (st_size, st_size))
+            neutral = cv2.resize(self.neutral, (st_size, st_size))
+
             y_1 = faces[i][1] + faces[i][3] - st_size
             y_2 = faces[i][1] + faces[i][3]
             x_1 = faces[i][0] + faces[i][2] - st_size
@@ -95,7 +130,7 @@ class Model:
                     self.get_sticker_backgr(image[y_1:y_2, x_1:x_2], smiley)
             else:
                 image[y_1:y_2, x_1:x_2] = \
-                    self.get_sticker_backgr(image[y_1:y_2, x_1:x_2], neut)
+                    self.get_sticker_backgr(image[y_1:y_2, x_1:x_2], neutral)
 
         return image
 
@@ -107,9 +142,8 @@ class Model:
         labels = []
         if num_faces == 0:
             return num_faces, image
-        for (f_x, f_y, f_w, f_h) in faces:
-            img_cropped = image[f_y:f_y + f_h, f_x:f_x + f_w]
-
+        for bound_box in faces:
+            img_cropped = self.crop_face(bound_box, image)
             label = self.get_smile_label(img_cropped)
             labels.append(label)
         color = (0, 255, 0)
