@@ -5,7 +5,7 @@ import sys
 from threading import Thread
 import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-from utils.image_processing import Model
+from utils.image_processing import find_faces_n_get_labels
 from utils.database2 import DbConnection
 
 
@@ -13,7 +13,6 @@ class Bot:  # pylint: disable=too-few-public-methods
 
     def __init__(self, token):
         self.token = token
-        self.model = Model()
 
     @staticmethod
     def _start(bot, update):
@@ -29,14 +28,15 @@ class Bot:  # pylint: disable=too-few-public-methods
         bot.send_message(chat_id=update.message.chat_id,
                          text='This is not a picture :(')
 
-    def _ans_to_picture(self, bot, update):
+    @staticmethod
+    def _ans_to_picture(bot, update):
         bot.send_chat_action(chat_id=update.message.chat_id,
                              action=telegram.ChatAction.UPLOAD_PHOTO)
         num_id = update.message.photo[-1].file_id
         photo = bot.getFile(num_id)
         with io.BytesIO() as image_buffer:
             photo.download(out=image_buffer)
-            num_faces, msg_buf = self.model.predict_labels(image_buffer)
+            num_faces, msg_buf = find_faces_n_get_labels(image_buffer)
             if num_faces == 0:
                 bot.send_message(
                     chat_id=update.message.chat_id, text='Faces not found')
