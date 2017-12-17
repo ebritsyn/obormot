@@ -4,6 +4,7 @@ import numpy as np
 from PIL import Image
 import dlib
 from keras.models import model_from_json
+import tensorflow as tf
 
 
 class Model:
@@ -11,6 +12,7 @@ class Model:
     def __init__(self):
         self.model = model_from_json(open('data/model/model.json').read())
         self.model.load_weights('data/model/weights.h5')
+        self.graph = tf.get_default_graph()
 
     @staticmethod
     def convert2rgb(img):
@@ -37,13 +39,15 @@ class Model:
             faces.append(self.rect_to_bb(rect))
         return faces
 
-    @staticmethod
-    def get_smile_label(model, img_face):
+    def get_smile_label(self, img_face):
 
         gray_cr_res = cv2.cvtColor(cv2.resize(img_face, (32, 32)),
                                    cv2.COLOR_BGR2GRAY)
         gray_cr_res = np.reshape(gray_cr_res, (32, 32, 1)) / 255
-        score = model.predict(np.array([gray_cr_res]))[0][1]
+
+        with self.graph.as_default():
+            score = self.model.predict(np.array([gray_cr_res]))[0][1]
+
         threshold = 0.12
         if score > threshold:
             label = 1
@@ -105,7 +109,8 @@ class Model:
             return num_faces, image
         for (f_x, f_y, f_w, f_h) in faces:
             img_cropped = image[f_y:f_y + f_h, f_x:f_x + f_w]
-            label = self.get_smile_label(self.model, img_cropped)
+
+            label = self.get_smile_label(img_cropped)
             labels.append(label)
         color = (0, 255, 0)
         for (f_x, f_y, f_w, f_h) in faces:
