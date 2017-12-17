@@ -6,7 +6,7 @@ from threading import Thread
 import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from utils.image_processing import Model
-from utils.database2 import DbConnection
+from utils.database import DbConnection
 
 
 class Bot:  # pylint: disable=too-few-public-methods
@@ -14,6 +14,7 @@ class Bot:  # pylint: disable=too-few-public-methods
     def __init__(self, token):
         self.token = token
         self.model = Model()
+        self.data = DbConnection('data.db')
 
     @staticmethod
     def _start(bot, update):
@@ -22,10 +23,27 @@ class Bot:  # pylint: disable=too-few-public-methods
             text="I'm a bot, please talk to me!")
 
     @staticmethod
-    def _ans_to_not_photo(bot, update):
-        data = DbConnection('data.db')
-        data.add_user(update)
-        data.add_message(update)
+    def parse_user(upd):
+        mess = upd.message
+        username = mess.chat.username
+        name1 = mess.chat.first_name
+        name2 = mess.chat.last_name
+        chat_id = int(mess.chat.id)
+        return username, name1, name2, chat_id
+
+    @staticmethod
+    def parse_message(upd):
+        mess = upd.message
+        mess_id = mess.message_id
+        text = mess.text
+        chat_id = int(mess.chat.id)
+        return mess_id, text, chat_id
+
+    def _ans_to_not_photo(self, bot, update):
+        username, name1, name2, chat_id = self.parse_user(update)
+        mess_id, text, chat_id = self.parse_message(update)
+        self.data.add_user(username, name1, name2, chat_id)
+        self.data.add_message(mess_id, text, chat_id)
         bot.send_message(chat_id=update.message.chat_id,
                          text='This is not a picture :(')
 
@@ -45,6 +63,7 @@ class Bot:  # pylint: disable=too-few-public-methods
                 bot.send_photo(chat_id=update.message.chat_id, photo=msg_buf)
 
     def start(self):
+        self.data.start()
         updater = Updater(token=self.token)
         dispatcher = updater.dispatcher
         logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - \
