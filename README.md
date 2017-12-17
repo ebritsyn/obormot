@@ -27,10 +27,6 @@ To run tests do the following steps in console:
 python setup.py test
 ```
 
-## Versioning
-
-TBD 
-
 ## Authors
 
 * **Eugene Britsyn** - *Initial work* - [ebritsyn](https://github.com/ebritsyn/)
