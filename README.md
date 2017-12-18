@@ -23,9 +23,9 @@ dlib
 To run Obormot run this command in console:
 
 ```
-python run_bot.py
+python run_bot.py [token]
 ```
-
+[token] is a telegram bot token that you need to access HTTP API
 
 ## Running the tests
 
