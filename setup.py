@@ -15,13 +15,6 @@ setup(
     license="MIT",
     packages=find_packages(exclude=['tests*']),
     install_requires=[
-        "python-telegram-bot",
-        "keras",
-        "pillow",
-        "opencv-python",
-        "tensorflow",
-        "numpy",
-        "dlib",
     ],
     setup_requires=[
         "pytest-runner",

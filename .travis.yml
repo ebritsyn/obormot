@@ -10,9 +10,13 @@ before_install:
  - sudo apt-get install cmake
  - sudo apt-get install python-dev
 install:
-  #- pip install -r requirements.txt
   - pip install codecov
   - pip install h5py
+  - pip install tensorflow
+  - pip install opencv-python
+  - pip install pillow
+  - pip install keras
+  - pip install python-telegram-bot
 script:
   - ./setup.py test
 after_success:
