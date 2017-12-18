@@ -20,7 +20,6 @@ setup(
         "pillow",
         "opencv-python",
         "tensorflow",
-        "h5py",
         "numpy",
         "dlib",
     ],
