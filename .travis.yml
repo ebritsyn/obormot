@@ -12,6 +12,7 @@ before_install:
 install:
   #- pip install -r requirements.txt
   - pip install codecov
+  - pip install h5py
 script:
   - ./setup.py test
 after_success:
