@@ -8,7 +8,7 @@ picture and predicts if they are smiling or neutral. It obtains faces
 bounding boxes, draws them in the input image and sets corresponding 
 labels (emojis :smiling: and :neutral:) on found faces 
 
-### Prerequisites
+## Prerequisites
 
 You need to install the following python libraries to run the bot on your machine
 
@@ -18,6 +18,14 @@ python-telegram-bot
 opencv-python
 dlib
 ```
+## Running the bot
+
+To run Obormot run this command in console:
+
+```
+python run_bot.py
+```
+
 
 ## Running the tests
 
