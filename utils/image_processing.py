@@ -9,6 +9,14 @@ import tensorflow as tf
 
 class Model:
 
+    """This class represents the base model of the whole project. The model predicts
+    if the face on the picture is smiling or not. The model and its weights
+    are being loaded from data/model/.
+    The main method of the class is predict_labels(), which takes an input image,
+    finds faces in this image, draws their boundary boxes and labels these faces
+    by adding corresponding emojis on the picture.
+    """
+
     def __init__(self):
 
         self.smiley = cv2.imread('data/pics/smiling.png')
@@ -21,12 +29,18 @@ class Model:
 
     @staticmethod
     def convert2rgb(img):
-
+        """Convert BGR image into RGB
+            Parameters: img: ndarray
+            :rtype: ndarray
+        """
         return cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
     @staticmethod
     def rect_to_bb(rect):
-
+        """Returns rectangle parameters from rectangle object
+            Parameters: rect: object
+            :rtype: list
+        """
         rect_x = rect.left()
         rect_y = rect.top()
         rect_w = rect.right() - rect_x
@@ -34,7 +48,11 @@ class Model:
         return rect_x, rect_y, rect_w, rect_h
 
     def get_faces(self, img):
-
+        """Find faces in the picture and return list of boundary boxes
+        of found faces
+            Parameters: img: ndarray
+            :rtype: list
+        """
         image = img
         detector = dlib.get_frontal_face_detector()
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -45,6 +63,11 @@ class Model:
         return faces
 
     def get_smile_label(self, img_face):
+        """Predict smile on a face and return label
+        (0 for neutral and 1 for smiling face)
+            Parameters: img_face: ndarray
+            :rtype: int
+        """
         gray_cr_res = cv2.cvtColor(cv2.resize(img_face, (32, 32)),
                                    cv2.COLOR_BGR2GRAY)
         gray_cr_res = np.reshape(gray_cr_res, (32, 32, 1)) / 255
@@ -61,7 +84,11 @@ class Model:
 
     @staticmethod
     def get_sticker_backgr(backgr, sticker):
-
+        """Merge a sticker and its background and return merged image
+            Parameters: backgr: ndarray
+                        sticker: ndarray
+            :rtype: ndarray
+        """
         sticker_gray = cv2.cvtColor(sticker, cv2.COLOR_BGR2GRAY)
         _, mask = cv2.threshold(sticker_gray, 10, 255, cv2.THRESH_BINARY)
         mask_inv = cv2.bitwise_not(mask)
@@ -72,6 +99,11 @@ class Model:
 
     @staticmethod
     def crop_face(bound_box, img):
+        """Crop face from the input image according to its boundary box
+            Parameters: bound_box: list
+                        img: ndarray
+            :rtype: ndarray
+        """
         f_x, f_y, f_w, f_h = bound_box
         top, bottom, left, right = 0, 0, 0, 0
         if f_y < 0:
@@ -98,7 +130,13 @@ class Model:
         return img_cropped
 
     def add_stickers(self, img, faces, labels):
-
+        """Add emoji sticker in the input picture according to predicted
+        smile labels
+            Parameters: img: ndarray of input image
+                        faces: list of boundary boxes
+                        labels: list of smile labels
+            :rtype: ndarray
+        """
         image = np.array(img)
         for i, label in enumerate(labels):
 
@@ -135,7 +173,10 @@ class Model:
         return image
 
     def predict_labels(self, img):
-
+        """Predict if there smiles on picture and label faces with corresponding emoji
+            Parameters: img: ndarray of input image
+            :rtype: ndarray
+        """
         image = self.bytes2ndarray(img)
         faces = self.get_faces(image)
         num_faces = len(faces)
@@ -155,13 +196,19 @@ class Model:
 
     @staticmethod
     def ndarray2bytes(array):
-
+        """Convert image into bytes
+            Parameters: array: ndarray
+            :rtype: io.BytesIO
+        """
         buf = io.BytesIO()
         Image.fromarray(array).save(buf, format="jpeg")
         return buf
 
     @staticmethod
     def bytes2ndarray(buf):
-
+        """Convert image into bytes
+            Parameters: buf: io.BytesIO
+            :rtype: ndarray
+        """
         image = np.array(Image.open(buf))
         return image
