@@ -8,9 +8,12 @@ before_install:
  - sudo add-apt-repository ppa:george-edison55/cmake-3.x -y
  - sudo apt-get update
  - sudo apt-get install cmake
+ - sudo apt-get install python-dev
 install:
-  - pip install -r requirements.txt
   - pip install codecov
+  - pip install h5py
+  - pip install tensorflow
+  - pip install opencv-python
 script:
   - ./setup.py test
 after_success:

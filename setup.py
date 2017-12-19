@@ -17,6 +17,11 @@ setup(
     install_requires=[
     ],
     setup_requires=[
+        "python-telegram-bot",
+        "keras",
+        "pillow",
+        "numpy",
+        "dlib",
         "pytest-runner",
         "pytest-pylint",
         "pytest-pycodestyle",
@@ -28,6 +33,11 @@ setup(
         "pylint",
         "pycodestyle",
         "pep257",
+    ],
+    extras_require=[
+       "tensorflow",
+        "h5py",
+        "opencv-python",
     ],
     classifiers=[
         "Development Status :: 1 - Planning",
