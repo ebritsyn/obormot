@@ -20,7 +20,6 @@ setup(
         "python-telegram-bot",
         "keras",
         "pillow",
-        "numpy",
         "dlib",
         "pytest-runner",
         "pytest-pylint",
