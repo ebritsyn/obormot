@@ -35,7 +35,7 @@ setup(
         "numpy": ["numpy>=1.13"],
         "h5py": ["h5py"],
         "opencv-python": ["opencv-python"],
-        "python-telegram-bot": ["python-telegram-bot=9.0.0"],
+        "python-telegram-bot": ["python-telegram-bot>=9.0.0"],
         "keras": ["keras>=2.1.2"],
         "pillow": ["pillow"],
     },
