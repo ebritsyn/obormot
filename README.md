@@ -21,7 +21,6 @@ opencv-python
 dlib
 h5py
 pillow
-
 ```
 ## Running the bot
 
