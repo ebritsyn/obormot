@@ -2,13 +2,11 @@ import io
 import cv2
 import numpy as np
 from PIL import Image
-import dlib
 from keras.models import model_from_json
 import tensorflow as tf
-
+import dlib
 
 class Model:
-
     """This class represents the base model of the whole project. The model predicts
     if the face on the picture is smiling or not. The model and its weights
     are being loaded from data/model/.
@@ -16,7 +14,6 @@ class Model:
     finds faces in this image, draws their boundary boxes and labels these faces
     by adding corresponding emojis on the picture.
     """
-
     def __init__(self):
 
         self.smiley = cv2.imread('data/pics/smiling.png')
