@@ -15,8 +15,13 @@ You need to install the following python libraries to run the bot on your machin
 ```
 numpy
 python-telegram-bot
+tensorflow
+keras
 opencv-python
 dlib
+h5py
+pillow
+
 ```
 ## Running the bot
 
