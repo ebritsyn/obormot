@@ -20,7 +20,6 @@ setup(
         "python-telegram-bot",
         "keras",
         "pillow",
-        "opencv-python",
         "numpy",
         "dlib",
         "pytest-runner",
@@ -38,6 +37,7 @@ setup(
     extras_require=[
        "tensorflow",
         "h5py",
+        "opencv-python",
     ],
     classifiers=[
         "Development Status :: 1 - Planning",
