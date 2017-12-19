@@ -6,6 +6,7 @@ from keras.models import model_from_json
 import tensorflow as tf
 import dlib
 
+
 class Model:
     """This class represents the base model of the whole project. The model
     predicts if the face on the picture is smiling or not. The model and
