@@ -11,10 +11,10 @@ from utils.database import DbConnection
 
 class Bot:  # pylint: disable=too-few-public-methods
 
-    def __init__(self, token):
+    def __init__(self, token, db_path):
         self.token = token
         self.model = Model()
-        self.data = DbConnection('data.db')
+        self.data = DbConnection(db_path)
 
     @staticmethod
     def _start(bot, update):
