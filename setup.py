@@ -17,9 +17,6 @@ setup(
     install_requires=[
     ],
     setup_requires=[
-        "python-telegram-bot",
-        "keras",
-        "pillow",
         "dlib",
         "pytest-runner",
         "pytest-pylint",
@@ -33,11 +30,15 @@ setup(
         "pycodestyle",
         "pep257",
     ],
-    extras_require=[
-       "tensorflow",
-        "h5py",
-        "opencv-python",
-    ],
+    extras_require={
+        "tf": ["tensorflow>=1.0.0"],
+        "tf_gpu": ["tensorflow-gpu>=1.0.0"],
+        "h5py": ["tensorflow-gpu>=1.0.0"],
+        "opencv-python": ["opencv-python"],
+        "python-telegram-bot": ["python-telegram-bot"],
+        "keras": ["keras"],
+        "pillow": ["pillow"],
+    },
     classifiers=[
         "Development Status :: 1 - Planning",
         "License :: OSI Approved :: MIT License",

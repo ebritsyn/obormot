@@ -14,6 +14,9 @@ install:
   - pip install h5py
   - pip install tensorflow
   - pip install opencv-python
+  - pip install python-telegram-bot
+  - pip install keras
+  - pip install pillow
 script:
   - ./setup.py test
 after_success:
