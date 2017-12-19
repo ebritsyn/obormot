@@ -7,12 +7,12 @@ import tensorflow as tf
 import dlib
 
 class Model:
-    """This class represents the base model of the whole project. The model predicts
-    if the face on the picture is smiling or not. The model and its weights
-    are being loaded from data/model/.
-    The main method of the class is predict_labels(), which takes an input image,
-    finds faces in this image, draws their boundary boxes and labels these faces
-    by adding corresponding emojis on the picture.
+    """This class represents the base model of the whole project. The model
+    predicts if the face on the picture is smiling or not. The model and
+    its weights are being loaded from data/model/. The main method of the
+    class is predict_labels(), which takes an input image, finds faces in
+    this image, draws their boundary boxes and labels these faces by adding
+    corresponding emojis on the picture.
     """
     def __init__(self):
 
