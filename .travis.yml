@@ -10,6 +10,7 @@ before_install:
  - sudo apt-get install cmake
  - sudo apt-get install python-dev
  - sudo apt-get install libhdf5-dev
+ - sudo apt-get install gfortran libopenblas-dev liblapack-dev
 install:
   - pip install codecov
   - pip install tensorflow
