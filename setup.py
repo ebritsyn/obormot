@@ -20,7 +20,7 @@ setup(
         "python-telegram-bot",
         "keras",
         "tensorflow",
-        "opencv-python"
+        "opencv-python",
     ],
     setup_requires=[
         "pytest-runner",
