@@ -17,6 +17,7 @@ setup(
     ],
     setup_requires=[
         "dlib",
+        "keras"
         "pytest-runner",
         "pytest-pylint",
         "pytest-pycodestyle",
@@ -36,7 +37,6 @@ setup(
         "h5py": ["h5py"],
         "opencv-python": ["opencv-python"],
         "python-telegram-bot": ["python-telegram-bot>=9.0.0"],
-        "keras": ["keras>=2.1.2"],
         "pillow": ["pillow"],
     },
     classifiers=[
