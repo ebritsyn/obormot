@@ -1,9 +1,9 @@
 import io
 import cv2
 import numpy as np
+import tensorflow as tf
 from PIL import Image
 from keras.models import model_from_json
-import tensorflow as tf
 import dlib
 
 
