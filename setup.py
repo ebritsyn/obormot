@@ -16,13 +16,13 @@ setup(
     install_requires=[
     ],
     setup_requires=[
-        "dlib",
-        "pillow"
         "pytest-runner",
         "pytest-pylint",
         "pytest-pycodestyle",
         "pytest-pep257",
         "pytest-cov",
+        "dlib",
+        "pillow",
     ],
     tests_require=[
         "pytest",
