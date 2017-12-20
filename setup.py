@@ -25,7 +25,6 @@ setup(
         "pillow",
         "numpy",
         "h5py",
-        "opencv-python",
         "python-telegram-bot",
         "keras",
     ],
@@ -37,7 +36,8 @@ setup(
     ],
     extras_require={
         "tf": ["tensorflow>=1.4.0"],
-        "tf_gpu": ["tensorflow-gpu>=1.4.0"]
+        "tf_gpu": ["tensorflow-gpu>=1.4.0"],
+        "opencv-python": ["opencv-python"],
     },
     classifiers=[
         "Development Status :: 1 - Planning",
