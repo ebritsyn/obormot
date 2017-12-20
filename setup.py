@@ -19,6 +19,8 @@ setup(
         "h5py",
         "python-telegram-bot",
         "keras",
+        "tensorflow"
+        "opencv-python"
     ],
     setup_requires=[
         "pytest-runner",
@@ -33,11 +35,6 @@ setup(
         "pycodestyle",
         "pep257",
     ],
-    extras_require={
-        "tf": ["tensorflow>=1.4.0"],
-        "tf_gpu": ["tensorflow-gpu>=1.4.0"],
-        "opencv-python": ["opencv-python"],
-    },
     classifiers=[
         "Development Status :: 1 - Planning",
         "License :: OSI Approved :: MIT License",
