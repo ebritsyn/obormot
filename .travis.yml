@@ -13,9 +13,8 @@ before_install:
  - sudo apt-get install gfortran libopenblas-dev liblapack-dev
 install:
   - pip install codecov
-  - pip install tensorflow
-  - pip install opencv-python
 script:
+  - pip install .
   - ./setup.py test
 after_success:
   - codecov
