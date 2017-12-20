@@ -23,6 +23,11 @@ setup(
         "pytest-cov",
         "dlib",
         "pillow",
+        "numpy",
+        "h5py",
+        "opencv-python",
+        "python-telegram-bot",
+        "keras",
     ],
     tests_require=[
         "pytest",
@@ -32,12 +37,7 @@ setup(
     ],
     extras_require={
         "tf": ["tensorflow>=1.4.0"],
-        "tf_gpu": ["tensorflow-gpu>=1.4.0"],
-        "numpy": ["numpy>=1.13"],
-        "h5py": ["h5py"],
-        "opencv-python": ["opencv-python"],
-        "python-telegram-bot": ["python-telegram-bot>=9.0.0"],
-        "keras": ["keras>=2.1.2"],
+        "tf_gpu": ["tensorflow-gpu>=1.4.0"]
     },
     classifiers=[
         "Development Status :: 1 - Planning",
