@@ -14,6 +14,11 @@ setup(
     license="MIT",
     packages=find_packages(exclude=['tests*']),
     install_requires=[
+        "dlib",
+        "pillow",
+        "h5py",
+        "python-telegram-bot",
+        "keras",
     ],
     setup_requires=[
         "pytest-runner",
@@ -21,11 +26,6 @@ setup(
         "pytest-pycodestyle",
         "pytest-pep257",
         "pytest-cov",
-        "dlib",
-        "pillow",
-        "h5py",
-        "python-telegram-bot",
-        "keras",
     ],
     tests_require=[
         "pytest",
