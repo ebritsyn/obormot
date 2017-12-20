@@ -12,6 +12,7 @@ before_install:
 install:
   - pip install codecov
   - pip install tensorflow
+  - pip install opencv-python
 script:
   - ./setup.py test
 after_success:
