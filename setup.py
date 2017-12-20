@@ -19,7 +19,7 @@ setup(
         "h5py",
         "python-telegram-bot",
         "keras",
-        "tensorflow"
+        "tensorflow",
         "opencv-python"
     ],
     setup_requires=[
