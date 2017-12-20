@@ -23,7 +23,6 @@ setup(
         "pytest-cov",
         "dlib",
         "pillow",
-        "numpy",
         "h5py",
         "python-telegram-bot",
         "keras",
