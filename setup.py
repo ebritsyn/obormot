@@ -14,6 +14,7 @@ setup(
     license="MIT",
     packages=find_packages(exclude=['tests*']),
     install_requires=[
+        "numpy",
         "dlib",
         "pillow",
         "h5py",
